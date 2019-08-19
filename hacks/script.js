@@ -4,7 +4,8 @@ if (!window.history.state) {
   const a = document.createElement('a')
   a.textContent = 'start'
   a.href = "#"
-  a.onclick = () => {
+  a.onclick = (e) => {
+    e.preventDefault()
 
     for (let i = 0; i < n; i++) {
       history.pushState(i, "num" + i, "?h-" + i)
