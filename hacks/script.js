@@ -26,7 +26,7 @@ document.body.appendChild(el);
 
 const render = () => {
   const i = window.history.state
-  el.innerText = r(i, '.') + '|' + r(n - i - 1, '.')
+  el.innerText = r(i, '.') + '△' + r(n - i - 1, '.')
 
   document.body.style.transform =
     `translateX(${((i / n) - 0.5) * 20}%)`
