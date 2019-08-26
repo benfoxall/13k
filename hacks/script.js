@@ -18,7 +18,7 @@ window.addEventListener('popstate', render)
 const k = '_'
 let bullets = JSON.parse(sessionStorage.getItem(k) || '[]')
 window.addEventListener('beforeunload', () => {
-  bullets.push(+ new Date)
+  bullets.push([window.history.state, + new Date])
 
   sessionStorage.setItem(k, JSON.stringify(bullets))
 })
@@ -49,15 +49,6 @@ if (!window.history.state) {
 
   render()
 
-  // const x = document.createElement('div')
-  // x.className = 'bullet'
-  // x.textContent = '▲'
-  // document.body.appendChild(x);
-
-  // const at = + new Date;
-
-  // const fire = [+ new Date];
-
   const loop = () => {
     const now = + new Date;
 
@@ -67,18 +58,18 @@ if (!window.history.state) {
 
 
     bullets
-      .forEach(b => {
+      .forEach(([i, b]) => {
 
         const x = document.createElement('div')
         x.className = 'bullet'
         x.textContent = '▲'
-        x.style.transform = `translate(-50%, ${(b - now) / 25}vh)`
+        x.style.transform = `translate(-50%, ${(b - now) / 25}vh) translateX(${(i - n/2) * 5}vw)`
         document.body.appendChild(x);
 
       })
 
     bullets
-      = bullets.filter(b => 
+      = bullets.filter(([_, b]) => 
         ((b - now) / 25) > -100
       )
 
