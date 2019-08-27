@@ -1,5 +1,9 @@
 const n = 13;
 
+const el = (name, props) => Object.assign(document.createElement(name), props)
+const style = (element, props) => Object.assign(element.style, props)
+const append = el => document.body.appendChild(el)
+
 const dom = (parent, array, cb) => {
   if(parent.children.length !== array.length) {
     parent.innerHTML = ''
@@ -26,24 +30,18 @@ const r = (length, s) => Array.from({ length }, _ => s).join('')
 const text = (i) => r(i, '.') + '△' + r(n - i - 1, '.')
 
 
-const el = document.createElement('div')
-el.className = 'base'
-document.body.appendChild(el);
-
 const render = () => {
   const i = window.history.state
-  // el.innerText = text(i)
 
   dom(base, text(i).split(''), (value, el, i) => {
     el.innerText = value
-    Object.assign(
-      el.style, {
-        position: 'absolute',
-        left: '50%',
-        bottom: '1vh',
-        transform: `translate(-50%, 0) translate(${(i - n/2) * 5}vw, 0)`
-      }
-    )
+
+    style(el, {
+      position: 'absolute',
+      left: '50%',
+      bottom: '1vh',
+      transform: `translate(-50%, 0) translate(${(i - n/2) * 5}vw, 0)`
+    })
   })
 
 }
@@ -65,23 +63,28 @@ if (window.history.state === undefined || window.history.state === null) {
   
   console.log("START")
 
-  const a = document.createElement('a')
-  a.textContent = '[START]'
-  a.style.cursor = 'pointer'
-  a.onclick = (e) => {
-    a.remove()
-    e.preventDefault()
-
-    for (let i = 0; i < n; i++) {
-      history.pushState(i, "num" + i, '?' + text(i))
+  const button = el('a', {
+    textContent: '[START]',
+    onclick: (e) => {
+      button.remove()
+      e.preventDefault()
+  
+      for (let i = 0; i < n; i++) {
+        history.pushState(i, "num" + i, '?' + text(i))
+      }
+  
+      history.go(~~-n/2)
+  
+      render()
     }
+  });
 
-    history.go(~~-n/2)
+  style(button, {
+    cursor: 'pointer'
+  })
 
-    render()
-  }
+  append(button)
 
-  document.body.appendChild(a);
 
 } else {
   console.log("FIRE")
@@ -91,9 +94,7 @@ if (window.history.state === undefined || window.history.state === null) {
   const loop = () => {
     const now = + new Date;
 
-
     dom(bulletsBase, bullets, (value, el) => {
-      // debugger;
       const [i, b] = value
 
       el.className = 'bullet'
