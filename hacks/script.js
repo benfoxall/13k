@@ -19,11 +19,19 @@ const dom = (parent, array, cb) => {
   }
 }
 
-const base  =  document.createElement('div')
-document.body.appendChild(base);
+const base = el('div')
+append(base);
 
-const bulletsBase  =  document.createElement('div')
-document.body.appendChild(bulletsBase);
+const bulletsBase = el('div')
+append(bulletsBase);
+
+
+style(document.body, {
+  textAlign: 'center',
+  fontWeight: 800,
+  fontFamily: 'monospace',
+  fontSize: '6vmin'
+})
 
 
 const r = (length, s) => Array.from({ length }, _ => s).join('')
@@ -70,7 +78,7 @@ if (window.history.state === undefined || window.history.state === null) {
       e.preventDefault()
   
       for (let i = 0; i < n; i++) {
-        history.pushState(i, "num" + i, '?' + text(i))
+        history.pushState(i, "", '?' + text(i))
       }
   
       history.go(~~-n/2)
@@ -97,9 +105,12 @@ if (window.history.state === undefined || window.history.state === null) {
     dom(bulletsBase, bullets, (value, el) => {
       const [i, b] = value
 
-      el.className = 'bullet'
+      // el.className = 'bullet'
       el.textContent = '▲'
       el.style.transform = `translate(-50%, ${(b - now) / 25}vh) translateX(${(i - n/2) * 5}vw)`
+      el.style.bottom = 0
+      el.style.position = 'absolute'
+      el.style.left = '50%'
     })
 
     bullets
